@@ -32,6 +32,38 @@ def getflags(flags):
 
  return int(QR+OPCODE+AA+TC+RD, 2).to_bytes(1, byteorder = 'big')+int(RA+Z+RCODE, 2).to_bytes(1, byteorder = 'big')
 
+def getquestiondomain(data):
+ 
+ state = 0
+ expectedlength = 0
+ domainstring = ''
+ domainparts = []
+ x = 0
+ y = 0
+
+ for byte in data:
+   if state == 1:
+      domainstring += chr(byte)
+      x += 1
+      if x == expectedlength:
+         domainparts.append(domainstring)
+         domainstring = ''
+         state = 0
+         x = 0
+      if byte == 0:
+         domainparts.append(domainstring)
+         break
+   else:
+      state = 1
+      expectedlength = byte
+   x +=1
+   y +=1
+
+ questiontype = data[y+1:y+3]
+ print(questiontype)
+   
+ return (domainparts, questiontype)
+
 def buildresponse(data):
  
  #Transaction ID
@@ -43,7 +75,13 @@ def buildresponse(data):
  
  # Get the flags
  Flags = getflags(data[2:4])
- print(Flags)
+ 
+ # Question Count
+ QDCOUNT = b'\x00\x01'
+
+ # Answer Count
+ getquestiondomain(data[12:])
+
 while 1:
  data,addr = sock.recvfrom(512)
  r = buildresponse(data)
