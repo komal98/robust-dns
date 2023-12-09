@@ -15,9 +15,9 @@
         { "host": "NS2.NAMESERVER.NET." }
     ],
     "a": [
-        { "name": "@", "ip": "127.0.0.1" },
-        { "name": "www", "ip": "127.0.0.1" },
-        { "name": "mail", "ip": "127.0.0.1" }
+        { "name": "@", "ttl": 400, "value": "127.0.0.1" },
+        { "name": "www", "ttl": 400,  "value": "127.0.0.1" },
+        { "name": "mail", "ttl": 400,  "value": "127.0.0.1" }
     ],
     "aaaa": [
         { "ip": "::1" },
